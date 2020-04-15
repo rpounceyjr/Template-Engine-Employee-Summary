@@ -26,8 +26,8 @@ const questionsArray = ["What is your name?", "What is your ID number?", "What i
 //Then the app should ask if more team members need to be added, 
 //run again if so. After all team members have been added, 
 //call render() and pass in the teamArray with the team member objects
+const teamArray = [];
 async function createTeam() {
-    const teamArray = [];
     await inquirer
         .prompt([
             {
@@ -67,32 +67,54 @@ async function createTeam() {
                 name: "school"
             }
         ]).then((response) => {
+            const runAgain = () => {
+                inquirer
+                    .prompt([
+                        {
+                            type: "list",
+                            message: "Would you like to add another team member?",
+                            name: "runAgain",
+                            choices: ["Yes", "No"]
+                        }
+                    ]).then((response) => {
+                        if (response.runAgain === "Yes") {
+                            console.log("Creating a new team member profile");
+                            createTeam();
+                        } else {
+                            return;
+                        }
+                    })
+            }
+
             if (response.role === "Engineer") {
                 const newEngineer = new Engineer(response.name, response.id, response.email, response.github);
                 teamArray.push(newEngineer);
+                runAgain();
             } else if (response.role === "Manager") {
                 const newManager = new Manager(response.name, response.id, response.email, response.officeNumber);
                 teamArray.push(newManager);
+                runAgain();
             } else {
                 const newIntern = new Intern(response.name, response.id, response.email, response.school);
                 teamArray.push(newIntern);
+                runAgain();
             }
         }).catch((err) => console.log(err));
 
-        // console.log(render(teamArray));
+    const renderedTeamData = render(teamArray);
+    console.log(teamArray);
 
-        fs.writeFile(outputPath, render(teamArray), function(err){
-            if (err){
-                console.log(err);
-            }else{
-                console.log("Success!");
-            }
-        })
+    fs.writeFile(outputPath, renderedTeamData, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Success!");
+        }
+    });
 
     // const renderArray = array => console.log(array);
     // renderArray(teamArray);
 }
-
 createTeam();
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
