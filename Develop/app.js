@@ -13,49 +13,87 @@ const render = require("./lib/htmlRenderer");
 const questionsArray = ["What is your name?", "What is your ID number?", "What is your email?",
     "What is your role?", "What is your office number?", "What is your GitHub username?",
     "What is the name of your school?"];
-
+//push employee objects to this array
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-inquirer
-    .prompt([
-        {
-            type: "input",
-            message: questionsArray[0],
-            name: "name"
-        },
-        {
-            type: "input",
-            message: questionsArray[1],
-            name: "id"
-        },
-        {
-            type: "input",
-            message: questionsArray[2],
-            name: "email"
-        },
-        {
-            type: "input",
-            message: questionsArray[3],
-            name: "role"
-        },
-        {
-            type: "input",
-            message: questionsArray[4],
-            name: "officNumber"
-        },
-        {
-            type: "input",
-            message: questionsArray[5],
-            name: "github"
-        },
-        {
-            type: "input",
-            message: questionsArray[6],
-            name: "school"
-        }
-    ]).then((response) => console.log(response)
-    );
+
+//create function createTeam()
+//function should ask which role is being created then 
+//ask more questions depending on the role
+//after receiving all input, it should plug responses into a 
+//constructor for the appropriate class and push that object to the teamArray
+//Then the app should ask if more team members need to be added, 
+//run again if so. After all team members have been added, 
+//call render() and pass in the teamArray with the team member objects
+async function createTeam() {
+    const teamArray = [];
+    await inquirer
+        .prompt([
+            {
+                type: "input",
+                message: questionsArray[0],
+                name: "name"
+            },
+            {
+                type: "input",
+                message: questionsArray[1],
+                name: "id"
+            },
+            {
+                type: "input",
+                message: questionsArray[2],
+                name: "email"
+            },
+            {
+                type: "list",
+                message: questionsArray[3],
+                name: "role",
+                choices: ["Manager", "Engineer", "Intern"]
+            },
+            {
+                type: "input",
+                message: questionsArray[4],
+                name: "officNumber"
+            },
+            {
+                type: "input",
+                message: questionsArray[5],
+                name: "github"
+            },
+            {
+                type: "input",
+                message: questionsArray[6],
+                name: "school"
+            }
+        ]).then((response) => {
+            if (response.role === "Engineer") {
+                const newEngineer = new Engineer(response.name, response.id, response.email, response.github);
+                teamArray.push(newEngineer);
+            } else if (response.role === "Manager") {
+                const newManager = new Manager(response.name, response.id, response.email, response.officeNumber);
+                teamArray.push(newManager);
+            } else {
+                const newIntern = new Intern(response.name, response.id, response.email, response.school);
+                teamArray.push(newIntern);
+            }
+        }).catch((err) => console.log(err));
+
+        // console.log(render(teamArray));
+
+        fs.writeFile(outputPath, render(teamArray), function(err){
+            if (err){
+                console.log(err);
+            }else{
+                console.log("Success!");
+            }
+        })
+
+    // const renderArray = array => console.log(array);
+    // renderArray(teamArray);
+}
+
+createTeam();
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!

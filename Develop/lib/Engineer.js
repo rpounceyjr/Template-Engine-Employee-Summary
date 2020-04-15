@@ -15,11 +15,4 @@ class Engineer extends Employee {
 
 }
 
-// const Roger = new Engineer('roger', 123, 'somethinghere', 'rpounceyjr');
-
-// console.log(Roger.name);
-// console.log(Roger.getGitHubUserName());
-// console.log(Roger.id);
-// console.log(Roger.email);
-
 module.exports = Engineer;
