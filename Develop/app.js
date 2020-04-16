@@ -91,7 +91,16 @@ async function createTeam() {
                             console.log("Creating a new team member profile");
                             createTeam();
                         } else {
-                            return;
+                            const renderedTeamData = render(teamArray);
+                            // console.log(teamArray);
+                        
+                            fs.writeFile(outputPath, renderedTeamData, function (err) {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    console.log("Team page written!");
+                                }
+                            });;
                         }
                     })
             }
@@ -110,17 +119,6 @@ async function createTeam() {
                 runAgain();
             }
         }).catch((err) => console.log(err));
-
-    const renderedTeamData = render(teamArray);
-    // console.log(teamArray);
-
-    fs.writeFile(outputPath, renderedTeamData, function (err) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("Team page written!");
-        }
-    });
 
     // const renderArray = array => console.log(array);
     // renderArray(teamArray);
