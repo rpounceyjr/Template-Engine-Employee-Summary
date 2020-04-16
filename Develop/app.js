@@ -54,19 +54,29 @@ async function createTeam() {
             {
                 type: "input",
                 message: questionsArray[4],
-                name: "officNumber"
+                name: "officeNumber",
+                when: function(answer){
+                    return answer.role === "Manager"
+                }
             },
             {
                 type: "input",
                 message: questionsArray[5],
-                name: "github"
+                name: "github",
+                when: function(answer){
+                    return answer.role === "Engineer"
+                }
             },
             {
                 type: "input",
                 message: questionsArray[6],
-                name: "school"
+                name: "school",
+                when: function(answer){
+                    return answer.role === "Intern"
+                }
             }
         ]).then((response) => {
+            // console.log(response.role);
             const runAgain = () => {
                 inquirer
                     .prompt([
@@ -102,13 +112,13 @@ async function createTeam() {
         }).catch((err) => console.log(err));
 
     const renderedTeamData = render(teamArray);
-    console.log(teamArray);
+    // console.log(teamArray);
 
     fs.writeFile(outputPath, renderedTeamData, function (err) {
         if (err) {
             console.log(err);
         } else {
-            console.log("Success!");
+            console.log("Team page written!");
         }
     });
 
