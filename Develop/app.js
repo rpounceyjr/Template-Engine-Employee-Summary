@@ -10,9 +10,9 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-const questionsArray = ["What is your name?", "What is your ID number?", "What is your email?",
-    "What is your role?", "What is your office number?", "What is your GitHub username?",
-    "What is the name of your school?"];
+const questionsArray = ["What is this team member's name?", "What is this team member's ID number?", "What is this team member's email?",
+    "What is this team member's role?", "What is the office number?", "What is this team member's GitHub username?",
+    "What is the name of this team member's school?"];
 const teamArray = [];
 
 function createTeam() {
