@@ -7,6 +7,7 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
+//These are used in the fs.writeFile
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 //render function used to create the team page is required in
@@ -26,17 +27,35 @@ function createTeam() {
             {
                 type: "input",
                 message: questionsArray[0],
-                name: "name"
+                name: "name",
+                validate: function validateName(answer){
+                  if(answer === ""){
+                      console.log("Please enter a valid name.")
+                  }
+                    return answer !== "";
+                }
             },
             {
                 type: "input",
                 message: questionsArray[1],
-                name: "id"
+                name: "id",
+                validate: function validateId(answer){
+                    if(answer.trim() === ""){
+                        console.log("Please enter a valid ID.")
+                    }
+                      return answer.trim() !== "";
+                  }
             },
             {
                 type: "input",
                 message: questionsArray[2],
-                name: "email"
+                name: "email",
+                validate: function validateEmail(answer){
+                    if(answer.trim() === ""){
+                        console.log("Please enter a valid email.")
+                    }
+                      return answer.trim() !== "";
+                  }
             },
             {
                 type: "list",
@@ -52,7 +71,13 @@ function createTeam() {
                 name: "officeNumber",
                 when: function (answer) {
                     return answer.role === "Manager"
-                }
+                },
+                validate: function validateOfficeNumber(answer){
+                    if(answer.trim() === ""){
+                        console.log("Please enter a valid ID.")
+                    }
+                      return answer.trim() !== "";
+                  }
             },
             {
                 type: "input",
@@ -60,7 +85,13 @@ function createTeam() {
                 name: "github",
                 when: function (answer) {
                     return answer.role === "Engineer"
-                }
+                },
+                validate: function validateGithub(answer){
+                    if(answer.trim() === ""){
+                        console.log("Please enter a valid GitHub username.")
+                    }
+                      return answer.trim() !== "";
+                  }
             },
             {
                 type: "input",
@@ -68,7 +99,13 @@ function createTeam() {
                 name: "school",
                 when: function (answer) {
                     return answer.role === "Intern"
-                }
+                },
+                validate: function validateOfficeNumber(answer){
+                    if(answer.trim() === ""){
+                        console.log("Please enter a valid school name.")
+                    }
+                      return answer.trim() !== "";
+                  }
             }
         ]).then((response) => {
 //the runAgain() function asks whether the user would like to add another
@@ -120,6 +157,5 @@ function createTeam() {
             }
         }).catch((err) => console.log(err));
 }
-
 
 createTeam();
